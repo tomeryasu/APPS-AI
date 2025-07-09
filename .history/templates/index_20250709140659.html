@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI App Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        background: linear-gradient(135deg, #f6f8ff, #eaf6f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .modal {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      }
+
+      textarea {
+        width: 100%;
+        height: 120px;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        transition: border-color 0.3s ease;
+      }
+
+      textarea:focus {
+        border-color: #4f46e5;
+        outline: none;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #ff7f50;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        background-color: #e55f30;
+      }
+
+      #output {
+        margin-top: 30px;
+        background: #f4f4f4;
+        padding: 15px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+        min-height: 100px;
+      }
+
+      #loader {
+        display: none;
+        margin-top: 15px;
+      }
+
+      .spinner {
+        width: 24px;
+        height: 24px;
+        border: 4px solid #ccc;
+        border-top-color: #4f46e5;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+</head>
+<body>
+    <div class="modal">
+        <h2>What app would you like to build?</h2>
+        <form id="promptForm" method="post">
+            <textarea name="prompt" id="modalPrompt" placeholder="e.g., a todo app with login and tasks"></textarea><br>
+            <button type="submit" id="modalSubmit"><span>→ Generate</span></button>
+        </form>
+
+        <div id="loader" class="spinner"></div>
+
+        {% if output %}
+        <h3>AI Output:</h3>
+        <pre id="output"></pre>
+        <script>
+          const content = {{ output | tojson }};
+        </script>
+        {% endif %}
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
