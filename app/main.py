@@ -12,7 +12,7 @@ import traceback
 load_dotenv()
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
