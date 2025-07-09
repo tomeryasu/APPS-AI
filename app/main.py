@@ -11,7 +11,7 @@ import traceback
 
 load_dotenv()
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "***REMOVED***")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "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")
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 OPENROUTER_MODEL = "meta-llama/llama-3-70b-instruct"
 
