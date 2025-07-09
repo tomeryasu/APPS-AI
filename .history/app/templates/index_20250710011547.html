@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI App Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="navbar">
+      <div class="nav-left">
+        <div class="logo">
+          <span class="logo-icon"></span> Base 44
+        </div>
+        <div class="nav-links">
+          <a href="#" class="nav-link">Pricing</a>
+          <a href="#" class="nav-link">Enterprise</a>
+        </div>
+      </div>
+      <button class="nav-btn">Start Building</button>
+    </div>
+    <div class="hero">
+      <div class="hero-title">
+        Let’s make your dream a <span class="highlight">reality.</span><br>Right now.
+      </div>
+      <div class="hero-sub">
+        Base44 lets you build fully-functional apps in minutes with just your words.<br>No coding necessary.
+      </div>
+      <div class="input-card">
+        <form id="promptForm" method="post" autocomplete="off">
+          <div class="input-row">
+            <input type="text" name="prompt" id="modalPrompt" placeholder="What do you want to build?" />
+            <button type="submit" class="send-btn"><span class="arrow-up">&#8593;</span></button>
+          </div>
+        </form>
+        <div class="suggestion-label">Not sure where to start? Try one of these:</div>
+        <div class="suggestions">
+          <div class="suggestion-pill">Reporting Dashboard</div>
+          <div class="suggestion-pill">Gaming Platform</div>
+          <div class="suggestion-pill">Onboarding Portal</div>
+          <div class="suggestion-pill">Networking App</div>
+          <div class="suggestion-pill">Room Visualizer</div>
+        </div>
+      </div>
+      <div class="trusted-row">
+        <div class="avatars">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="avatar" alt="avatar1" />
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="avatar" alt="avatar2" />
+          <img src="https://randomuser.me/api/portraits/women/68.jpg" class="avatar" alt="avatar3" />
+        </div>
+        <div class="trusted-text">Trusted by 300K+ users</div>
+      </div>
+      {% if output %}
+      <div style="margin-top:2.5rem; max-width:600px; width:100%;">
+        <pre id="output" style="background:#f8fafc; padding:18px; border-radius:12px; white-space:pre-wrap; font-size:1.08rem; color:#333; box-shadow:0 2px 8px rgba(0,0,0,0.04);">{{ output }}</pre>
+      </div>
+      {% endif %}
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
