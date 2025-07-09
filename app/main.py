@@ -24,7 +24,7 @@ async def read_form(request: Request):
 @app.post("/", response_class=HTMLResponse)
 async def generate_app(request: Request, prompt: str = Form(...)):
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": f"Build this app: {prompt}"}]
     )
     output = response.choices[0].message.content
@@ -34,7 +34,7 @@ async def generate_app(request: Request, prompt: str = Form(...)):
 async def generate_app_json(data: dict = Body(...)):
     prompt = data.get("prompt", "")
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": f"Build this app: {prompt}"}]
     )
     output = response.choices[0].message.content
@@ -49,7 +49,7 @@ async def build_app(data: dict = Body(...)):
         # Generate Flask app.py
         print("Calling OpenAI for app.py...")
         app_py_response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": f"Generate a minimal Flask app.py for: {prompt}. Use render_template for index.html."}]
         )
         app_py = app_py_response.choices[0].message.content
@@ -57,7 +57,7 @@ async def build_app(data: dict = Body(...)):
         # Generate index.html
         print("Calling OpenAI for index.html...")
         html_response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": f"Generate a minimal HTML for the main page of this Flask app: {prompt}. Only the HTML body, no Flask code."}]
         )
         html = html_response.choices[0].message.content
