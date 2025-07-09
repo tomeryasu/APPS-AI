@@ -2,8 +2,8 @@ from fastapi import FastAPI, Form, Request, Body
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from openai import OpenAI
 import os
+import requests
 from dotenv import load_dotenv
 import uuid
 from app.codegen.util import generate_flask_app_structure, zip_app_directory
@@ -11,11 +11,13 @@ import traceback
 
 load_dotenv()
 
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "***REMOVED***")
+OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_MODEL = "meta-llama/llama-3-70b-instruct"
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.get("/", response_class=HTMLResponse)
 async def read_form(request: Request):
@@ -23,21 +25,33 @@ async def read_form(request: Request):
 
 @app.post("/", response_class=HTMLResponse)
 async def generate_app(request: Request, prompt: str = Form(...)):
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": f"Build this app: {prompt}"}]
-    )
-    output = response.choices[0].message.content
+    payload = {
+        "model": OPENROUTER_MODEL,
+        "messages": [{"role": "user", "content": f"Build this app: {prompt}"}]
+    }
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    res = requests.post(OPENROUTER_API_URL, json=payload, headers=headers)
+    data = res.json()
+    output = data["choices"][0]["message"]["content"] if "choices" in data and data["choices"] else ""
     return templates.TemplateResponse("index.html", {"request": request, "output": output})
 
 @app.post("/generate")
 async def generate_app_json(data: dict = Body(...)):
     prompt = data.get("prompt", "")
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": f"Build this app: {prompt}"}]
-    )
-    output = response.choices[0].message.content
+    payload = {
+        "model": OPENROUTER_MODEL,
+        "messages": [{"role": "user", "content": f"Build this app: {prompt}"}]
+    }
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    res = requests.post(OPENROUTER_API_URL, json=payload, headers=headers)
+    data = res.json()
+    output = data["choices"][0]["message"]["content"] if "choices" in data and data["choices"] else ""
     return JSONResponse({"output": output})
 
 @app.post("/build")
@@ -48,19 +62,28 @@ async def build_app(data: dict = Body(...)):
         print("Prompt:", prompt)
         # Generate Flask app.py
         print("Calling OpenAI for app.py...")
-        app_py_response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": f"Generate a minimal Flask app.py for: {prompt}. Use render_template for index.html."}]
-        )
-        app_py = app_py_response.choices[0].message.content
+        # Generate Flask app.py
+        payload_app = {
+            "model": OPENROUTER_MODEL,
+            "messages": [{"role": "user", "content": f"Generate a minimal Flask app.py for: {prompt}. Use render_template for index.html."}]
+        }
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        app_py_res = requests.post(OPENROUTER_API_URL, json=payload_app, headers=headers)
+        app_py_data = app_py_res.json()
+        app_py = app_py_data["choices"][0]["message"]["content"] if "choices" in app_py_data and app_py_data["choices"] else ""
         print("app.py generated.")
         # Generate index.html
-        print("Calling OpenAI for index.html...")
-        html_response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": f"Generate a minimal HTML for the main page of this Flask app: {prompt}. Only the HTML body, no Flask code."}]
-        )
-        html = html_response.choices[0].message.content
+        print("Calling OpenRouter for index.html...")
+        payload_html = {
+            "model": OPENROUTER_MODEL,
+            "messages": [{"role": "user", "content": f"Generate a minimal HTML for the main page of this Flask app: {prompt}. Only the HTML body, no Flask code."}]
+        }
+        html_res = requests.post(OPENROUTER_API_URL, json=payload_html, headers=headers)
+        html_data = html_res.json()
+        html = html_data["choices"][0]["message"]["content"] if "choices" in html_data and html_data["choices"] else ""
         print("index.html generated.")
         # Save files
         app_id = str(uuid.uuid4())
