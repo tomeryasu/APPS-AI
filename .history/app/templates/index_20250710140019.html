@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Base44 – Build AI Apps Instantly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+    <style>
+      body {
+        background: linear-gradient(
+          120deg,
+          #d6dfff 0%,
+          #f6e7ff 50%,
+          #ffd6c0 100%
+        );
+        min-height: 100vh;
+        font-family: "Inter", sans-serif;
+        font-weight: 300;
+        margin: 0;
+      }
+      .main-content-fit {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+      .main-hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 24px;
+        padding-bottom: 0;
+        min-height: unset;
+      }
+      .main-title {
+        font-size: 2.7rem;
+        font-weight: 400;
+        color: #222;
+        text-align: center;
+        margin-bottom: 0.7rem;
+        letter-spacing: -2px;
+        line-height: 1.08;
+      }
+      .main-title .highlight {
+        color: #d6ff7f;
+      }
+      .main-sub {
+        font-size: 1.05rem;
+        color: #444;
+        text-align: center;
+        margin-bottom: 1.2rem;
+        margin-top: 0.1rem;
+        font-weight: 400;
+        max-width: 600px;
+      }
+      .cta-row {
+        display: flex;
+        gap: 18px;
+        margin-bottom: 2.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .cta-btn {
+        padding: 14px 36px;
+        background: #222;
+        color: #fff;
+        border: none;
+        border-radius: 24px;
+        font-size: 1.18rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: background 0.2s, color 0.2s;
+        text-decoration: none;
+      }
+      .cta-btn.secondary {
+        background: #fff;
+        color: #222;
+        border: 2px solid #d6ff7f;
+      }
+      .cta-btn.secondary:hover {
+        background: #f6ffde;
+      }
+      .cta-btn:hover {
+        background: #444;
+      }
+      .trusted-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 2.2rem;
+      }
+      .avatars {
+        display: flex;
+        align-items: center;
+      }
+      .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        margin-left: -10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        object-fit: cover;
+      }
+      .avatar:first-child {
+        margin-left: 0;
+      }
+      .trusted-text {
+        font-size: 1.05rem;
+        color: #444;
+        font-weight: 500;
+        margin-left: 10px;
+      }
+      .builder-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0;
+        margin-bottom: 40px;
+      }
+      .input-card {
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+        padding: 2.2rem 2.2rem 1.5rem 2.2rem;
+        max-width: 600px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 2.2rem;
+      }
+      .input-row {
+        display: flex;
+        align-items: center;
+        background: #f7f8fa;
+        border-radius: 18px;
+        padding: 0.5rem 0.7rem 0.5rem 1.1rem;
+        box-sizing: border-box;
+        margin-bottom: 1.1rem;
+        border: 1.5px solid #f0f0f0;
+      }
+      .input-row input[type="text"] {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: 1.15rem;
+        padding: 12px 0;
+        outline: none;
+        color: #333;
+      }
+      .send-btn {
+        background: #ff7f50;
+        border: none;
+        border-radius: 12px;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0.7rem;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        box-shadow: 0 2px 8px rgba(255, 127, 80, 0.1);
+      }
+      .send-btn:hover {
+        background: #ff914d;
+        transform: translateY(-2px) scale(1.05);
+      }
+      .send-btn .arrow-up {
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .suggestion-label {
+        font-size: 1.01rem;
+        color: #444;
+        margin-bottom: 0.7rem;
+        font-weight: 500;
+      }
+      .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin-bottom: 0.2rem;
+      }
+      .suggestion-pill {
+        background: #f7f8fa;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 18px;
+        padding: 7px 18px;
+        font-size: 1.01rem;
+        color: #333;
+        cursor: pointer;
+        transition: background 0.2s, border 0.2s;
+      }
+      .suggestion-pill:hover {
+        background: #fffbe7;
+        border: 1.5px solid #ffeb3b;
+      }
+      .logo {
+        text-decoration: none !important;
+      }
+      @media (max-width: 700px) {
+        .main-title {
+          font-size: 2.1rem;
+        }
+        .main-hero {
+          padding-top: 40px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="nav-left">
+        <a href="/" class="logo"><span class="logo-icon"></span>Yaso AI</a>
+      </div>
+      <div class="nav-links">
+        {% if user_name %}
+        <span style="font-weight: 500; color: #222; margin-right: 18px"
+          >{{ user_name }}</span
+        >
+        <a href="/dashboard" class="nav-link">Dashboard</a>
+        <a href="/logout" class="nav-link">Logout</a>
+        {% else %}
+        <a href="#" class="nav-link">Pricing</a>
+        <a href="#" class="nav-link">Enterprise</a>
+        <a href="/login" class="nav-btn" style="margin-left: 16px">Login</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="main-content-fit">
+      <div class="main-hero" style="padding-bottom: 0; min-height: unset">
+        <div class="main-title">
+          Build AI apps <span class="highlight">instantly.</span> No code. No
+          limits.
+        </div>
+        <div class="main-sub">
+          Yaso AI lets you create production-ready AI apps in seconds. Just
+          describe your idea and launch. No coding, no waiting, no limits.
+        </div>
+        <div class="cta-row"></div>
+      </div>
+      <div
+        class="builder-section"
+        id="builder"
+        style="margin-top: 0; margin-bottom: 0"
+      >
+        <div
+          class="input-card"
+          style="
+            max-width: 900px;
+            width: 90vw;
+            min-height: 220px;
+            padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+          "
+        >
+          <form id="promptForm" method="post" autocomplete="off">
+            <div class="input-row">
+              <input
+                type="text"
+                name="prompt"
+                id="modalPrompt"
+                placeholder="What do you want to build?"
+              />
+              <button type="submit" class="send-btn">
+                <span class="arrow-up">&#8593;</span>
+              </button>
+            </div>
+          </form>
+          <div
+            class="suggestion-label"
+            style="margin-bottom: 0.7rem; margin-top: 0.7rem"
+          >
+            Not sure where to start? Try one of these:
+          </div>
+          <div
+            class="suggestions"
+            style="min-height: 40px; align-items: center"
+          >
+            <div class="suggestion-pill">Reporting Dashboard</div>
+            <div class="suggestion-pill">Gaming Platform</div>
+            <div class="suggestion-pill">Onboarding Portal</div>
+            <div class="suggestion-pill">Networking App</div>
+            <div class="suggestion-pill">Room Visualizer</div>
+          </div>
+        </div>
+        {% if output %}
+        <div style="margin-top: 2.5rem; max-width: 600px; width: 100%">
+          <pre
+            id="output"
+            style="
+              background: #f8fafc;
+              padding: 18px;
+              border-radius: 12px;
+              white-space: pre-wrap;
+              font-size: 1.08rem;
+              color: #333;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            "
+          >
+{{ output }}</pre
+          >
+        </div>
+        {% endif %}
+      </div>
+      <div
+        class="trusted-row"
+        style="margin: 8px auto 0 auto; justify-content: center; gap: 6px"
+      >
+        <div class="avatars" style="gap: 0">
+          <img
+            src="https://randomuser.me/api/portraits/women/44.jpg"
+            class="avatar"
+            alt="avatar1"
+            style="width: 22px; height: 22px"
+          />
+          <img
+            src="https://randomuser.me/api/portraits/men/32.jpg"
+            class="avatar"
+            alt="avatar2"
+            style="width: 22px; height: 22px"
+          />
+          <img
+            src="https://randomuser.me/api/portraits/women/68.jpg"
+            class="avatar"
+            alt="avatar3"
+            style="width: 22px; height: 22px"
+          />
+        </div>
+        <div class="trusted-text" style="font-size: 0.92rem; margin-left: 4px">
+          Trusted by 300K+ users
+        </div>
+      </div>
+    </div>
+    <script src="/static/script.js"></script>
+  </body>
+</html>
