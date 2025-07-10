@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .dashboard-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+        }
+        .logout-link {
+            color: #ff7f50;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 2rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="/" class="logo"><span class="logo-icon"></span>Base44</a>
+        </div>
+        <div class="nav-links">
+            <a href="/logout" class="nav-link">Logout</a>
+        </div>
+    </div>
+    <div class="dashboard-container">
+        <div class="dashboard-title">Welcome, {{ user }}!</div>
+        <p>This is your user-only dashboard. You are logged in.</p>
+        <a href="/logout" class="logout-link">Logout</a>
+    </div>
+</body>
+</html>

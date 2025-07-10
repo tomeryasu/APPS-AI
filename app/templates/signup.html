@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 24px 0 18px 0;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1.5px solid #e0e0e0;
+        }
+        .divider:not(:empty)::before {
+            margin-right: 12px;
+        }
+        .divider:not(:empty)::after {
+            margin-left: 12px;
+        }
+        .google-btn {
+            background: #fff;
+            color: #222;
+            border: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            border-radius: 24px;
+            padding: 12px 0;
+            cursor: pointer;
+            transition: border 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 0.5rem;
+            width: 100%;
+        }
+        .google-btn:hover {
+            border: 2px solid #4285F4;
+            box-shadow: 0 4px 16px rgba(66,133,244,0.08);
+        }
+        .google-logo {
+            width: 22px;
+            height: 22px;
+        }
+        .subtitle {
+            color: #444;
+            font-size: 1.08rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            margin-top: -0.5rem;
+        }
+        .form-label {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 4px;
+            margin-left: 2px;
+        }
+        .footer-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 1rem;
+        }
+        .footer-link a {
+            color: #4285F4;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a, .nav-btn, .google-btn {
+            text-decoration: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="/" class="logo"><span class="logo-icon"></span>YASO AI</a>
+        </div>
+    </div>
+    <div class="hero">
+        <div class="container" style="max-width: 410px; margin-top: 40px; padding: 2.5rem 2.2rem 2.2rem 2.2rem; background: #fff; border-radius: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.07);">
+            <h1 style="text-align:center; font-size:2.1rem; font-weight:700; margin-bottom:0.3rem;">Create your account</h1>
+            <div class="subtitle">Sign up to get started with YASO AI</div>
+            <a href="/login/google" class="google-btn">
+                <img src="https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png" alt="Google Logo" class="google-logo">Sign up with Google
+            </a>
+            <div class="divider">or</div>
+            <form method="post" style="display:flex;flex-direction:column;gap:14px;">
+                <label class="form-label" for="name">Full Name</label>
+                <input type="text" name="name" id="name" placeholder="Full Name" required>
+                <label class="form-label" for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="Email" required>
+                <label class="form-label" for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <label class="form-label" for="confirm_password">Confirm Password</label>
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+                <input type="submit" value="Sign Up" class="nav-btn">
+            </form>
+            <div class="footer-link">Already have an account? <a href="/login">Login</a></div>
+            {% if error %}<p style="color:#ff7f50;text-align:center;">{{ error }}</p>{% endif %}
+        </div>
+    </div>
+</body>
+</html>

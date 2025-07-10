@@ -8,6 +8,9 @@ from dotenv import load_dotenv
 import uuid
 from app.codegen.util import generate_flask_app_structure, zip_app_directory
 import traceback
+from app.auth import init_db, create_user, verify_user
+from fastapi import status
+from fastapi.responses import RedirectResponse
 
 load_dotenv()
 
@@ -19,9 +22,82 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
+@app.on_event("startup")
+def on_startup():
+    init_db()
+
+@app.get("/login", response_class=HTMLResponse)
+async def login_get(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request, "error": None})
+
+@app.post("/login", response_class=HTMLResponse)
+async def login_post(request: Request):
+    form = await request.form()
+    email = form.get("email")
+    password = form.get("password")
+    print(f"LOGIN ATTEMPT: email={email}, password={password}")
+    result = verify_user(email, password)
+    print(f"verify_user result: {result}")
+    if result:
+        response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+        response.set_cookie(key="user", value=email, httponly=True)
+        print("Login successful, setting cookie and redirecting.")
+        return response
+    else:
+        print("Login failed: Invalid credentials.")
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"})
+
+@app.get("/signup", response_class=HTMLResponse)
+async def signup_get(request: Request):
+    return templates.TemplateResponse("signup.html", {"request": request, "error": None})
+
+@app.post("/signup", response_class=HTMLResponse)
+async def signup_post(request: Request):
+    form = await request.form()
+    name = form.get("name")
+    email = form.get("email")
+    password = form.get("password")
+    confirm_password = form.get("confirm_password")
+    if password != confirm_password:
+        return templates.TemplateResponse("signup.html", {"request": request, "error": "Passwords do not match"})
+    if create_user(name, email, password):
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    else:
+        return templates.TemplateResponse("signup.html", {"request": request, "error": "Email already registered"})
+
+# Removed duplicate login and signup routes
+
+@app.get("/logout")
+async def logout(request: Request):
+    response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    response.delete_cookie(key="user")
+    return response
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    user = request.cookies.get("user")
+    if not user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    return templates.TemplateResponse("dashboard.html", {"request": request, "user": user})
+
+import sqlite3
+
 @app.get("/", response_class=HTMLResponse)
 async def read_form(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "output": ""})
+    user_email = request.cookies.get("user")
+    user_name = None
+    if user_email:
+        try:
+            conn = sqlite3.connect("app/users.db")
+            c = conn.cursor()
+            c.execute("SELECT name FROM users WHERE email = ?", (user_email,))
+            row = c.fetchone()
+            if row:
+                user_name = row[0]
+            conn.close()
+        except Exception as e:
+            print(f"Error fetching user name: {e}")
+    return templates.TemplateResponse("index.html", {"request": request, "output": "", "user": user_email, "user_name": user_name})
 
 @app.post("/", response_class=HTMLResponse)
 async def generate_app(request: Request, prompt: str = Form(...)):
