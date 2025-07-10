@@ -7,3 +7,7 @@ python-dotenv
 supabase
 python-multipart
 requests
+passlib
+bcrypt
+passlib
+authlib
