@@ -11,8 +11,10 @@ import traceback
 from app.auth import init_db, create_user, verify_user
 from fastapi import status
 from fastapi.responses import RedirectResponse
+import os
 
-load_dotenv()
+# Explicitly load .env from the project root
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "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")
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"

@@ -1,13 +1,15 @@
 import os
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 print("DATABASE_URL:", os.getenv("DATABASE_URL"))
-import psycopg2
+import psycopg
 from passlib.context import CryptContext
 
 DB_URL = os.getenv("DATABASE_URL")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_conn():
-    return psycopg2.connect(DB_URL)
+    return psycopg.connect(DB_URL)
 
 def init_db():
     conn = get_conn()
