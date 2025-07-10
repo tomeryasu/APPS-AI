@@ -1,4 +1,4 @@
-gdocument.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("promptForm");
   const loader = document.getElementById("loader");
   const output = document.getElementById("output");
@@ -51,7 +51,7 @@ gdocument.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt })
       });
       const data = await res.json();
       hideLoader();
@@ -62,7 +62,7 @@ gdocument.addEventListener("DOMContentLoaded", () => {
       const buildRes = await fetch("/build", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt })
       });
       const buildData = await buildRes.json();
       if (buildData.download_url) {
@@ -72,8 +72,7 @@ gdocument.addEventListener("DOMContentLoaded", () => {
       }
     } catch (err) {
       hideLoader();
-      if (output)
-        output.textContent = "Something went wrong. Please try again.";
+      if (output) output.textContent = "Something went wrong. Please try again.";
       downloadBtn.style.display = "none";
     }
   }
@@ -85,7 +84,7 @@ gdocument.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  suggestionPills.forEach((pill) => {
+  suggestionPills.forEach(pill => {
     pill.addEventListener("click", () => {
       if (input) {
         input.value = pill.textContent;
